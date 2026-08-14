@@ -1,0 +1,120 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens. Everything visual in the app resolves to one of these — no
+ * screen invents its own colour or spacing value (see docs/roadmap.md, design
+ * track). Raw palette first, semantic names second, theme mapping last.
+ */
+
+:root {
+	/* raw palette — warm, outdoors, readable in daylight */
+	--c-sand-50: #faf8f4;
+	--c-sand-100: #f2ede4;
+	--c-sand-200: #e4dbcc;
+	--c-bark-400: #a8a29e;
+	--c-bark-600: #57534e;
+	--c-bark-800: #292524;
+	--c-bark-900: #1c1917;
+	--c-moss-100: #e7f0d9;
+	--c-moss-500: #4d7c0f;
+	--c-moss-600: #3f6212;
+	--c-moss-700: #365314;
+	--c-amber-100: #fef3c7;
+	--c-amber-600: #b45309;
+	--c-rust-100: #fee2e2;
+	--c-rust-600: #b91c1c;
+	--c-sky-100: #dbeafe;
+	--c-sky-600: #1d4ed8;
+
+	/* semantic — light */
+	--app-bg: var(--c-sand-50);
+	--app-surface: #ffffff;
+	--app-surface-sunken: var(--c-sand-100);
+	--app-border: var(--c-sand-200);
+	--app-text: var(--c-bark-900);
+	--app-text-muted: var(--c-bark-600);
+	--app-text-inverted: #ffffff;
+	--app-primary: var(--c-moss-600);
+	--app-primary-hover: var(--c-moss-700);
+	--app-primary-soft: var(--c-moss-100);
+	--app-warn: var(--c-amber-600);
+	--app-warn-soft: var(--c-amber-100);
+	--app-danger: var(--c-rust-600);
+	--app-danger-soft: var(--c-rust-100);
+	--app-info: var(--c-sky-600);
+	--app-info-soft: var(--c-sky-100);
+	--app-ring: var(--c-moss-500);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--app-bg: var(--c-bark-900);
+		--app-surface: var(--c-bark-800);
+		--app-surface-sunken: #201d1b;
+		--app-border: #3a3532;
+		--app-text: var(--c-sand-50);
+		--app-text-muted: var(--c-bark-400);
+		--app-primary: #7ba428;
+		--app-primary-hover: #8fbb31;
+		--app-primary-soft: #2b3418;
+		--app-text-inverted: var(--c-bark-900);
+		--app-warn: #f0b429;
+		--app-warn-soft: #3a2f14;
+		--app-danger: #f87171;
+		--app-danger-soft: #3a1c1c;
+		--app-info: #7aa7f5;
+		--app-info-soft: #1b2740;
+	}
+}
+
+@theme inline {
+	--color-bg: var(--app-bg);
+	--color-surface: var(--app-surface);
+	--color-sunken: var(--app-surface-sunken);
+	--color-line: var(--app-border);
+	--color-ink: var(--app-text);
+	--color-muted: var(--app-text-muted);
+	--color-inverted: var(--app-text-inverted);
+	--color-primary: var(--app-primary);
+	--color-primary-hover: var(--app-primary-hover);
+	--color-primary-soft: var(--app-primary-soft);
+	--color-warn: var(--app-warn);
+	--color-warn-soft: var(--app-warn-soft);
+	--color-danger: var(--app-danger);
+	--color-danger-soft: var(--app-danger-soft);
+	--color-info: var(--app-info);
+	--color-info-soft: var(--app-info-soft);
+
+	--radius-card: 0.875rem;
+	--radius-control: 0.625rem;
+
+	/* smallest comfortable target with gloves on (NFR-9) */
+	--spacing-touch: 2.75rem;
+}
+
+@layer base {
+	html {
+		background-color: var(--app-bg);
+		color: var(--app-text);
+		-webkit-text-size-adjust: 100%;
+	}
+
+	body {
+		min-height: 100dvh;
+		font-family:
+			system-ui,
+			-apple-system,
+			'Segoe UI',
+			Roboto,
+			sans-serif;
+	}
+
+	:where(a) {
+		color: var(--app-primary);
+	}
+
+	:where(:focus-visible) {
+		outline: 2px solid var(--app-ring);
+		outline-offset: 2px;
+	}
+}

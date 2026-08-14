@@ -1,0 +1,77 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "almostdonedear",
+	"compatibility_date": "2026-08-13",
+	"compatibility_flags": ["nodejs_als"],
+	"main": ".svelte-kit/cloudflare/_worker.js",
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".svelte-kit/cloudflare"
+	},
+	"workers_dev": true,
+	"preview_urls": true,
+	"observability": { "enabled": true },
+
+	// Create with: pnpm exec wrangler d1 create almostdonedear --location weur
+	// then paste the id here and into .env (CLOUDFLARE_DATABASE_ID) for drizzle-kit.
+	// The EU location hint is a deliberate placement decision — see ADR-016.
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "almostdonedear",
+			"database_id": "TODO-run-wrangler-d1-create",
+			"migrations_dir": "drizzle"
+		}
+	],
+
+	"vars": {
+		"PUBLIC_ORIGIN": "http://localhost:5173"
+	},
+
+	// Secrets (never in this file — `pnpm exec wrangler secret put <NAME>`):
+	//   RESEND_API_KEY     outbound email, ADR-011
+	//   VAPID_PRIVATE_KEY  Web Push signing
+	//   VAPID_PUBLIC_KEY   Web Push, also exposed to the client
+	//   SESSION_SECRET     session cookie signing
+
+	// Phase 2 adds the notification machinery (docs/roadmap.md). Both need the
+	// paid plan for Queues, and a wrapper entry that re-exports the adapter's
+	// fetch handler alongside scheduled() and queue():
+	//
+	// "triggers": { "crons": ["*/15 * * * *"] },
+	// "queues": {
+	//   "producers": [{ "binding": "NOTIFY", "queue": "almostdonedear-notify" }],
+	//   "consumers": [{ "queue": "almostdonedear-notify", "max_batch_size": 10 }]
+	// },
+
+	"env": {
+		"production": {
+			"name": "almostdonedear",
+			"vars": {
+				"PUBLIC_ORIGIN": "https://almostdonedear.app"
+			},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "almostdonedear",
+					"database_id": "TODO-run-wrangler-d1-create",
+					"migrations_dir": "drizzle"
+				}
+			]
+		},
+		"preview": {
+			"name": "almostdonedear-preview",
+			"vars": {
+				"PUBLIC_ORIGIN": "https://almostdonedear-preview.workers.dev"
+			},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "almostdonedear-preview",
+					"database_id": "TODO-run-wrangler-d1-create",
+					"migrations_dir": "drizzle"
+				}
+			]
+		}
+	}
+}
