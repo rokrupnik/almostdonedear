@@ -30,3 +30,6 @@ project.inlang/cache/
 # Cloudflare
 worker-configuration.d.ts
 .dev.vars
+
+# Generated design snapshots (pnpm run design:bundle)
+/design/

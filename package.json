@@ -28,7 +28,8 @@
 		"db:migrate:local": "wrangler d1 migrations apply almostdonedear --local",
 		"db:migrate:remote": "wrangler d1 migrations apply almostdonedear --remote",
 		"db:push": "drizzle-kit push",
-		"db:studio": "drizzle-kit studio"
+		"db:studio": "drizzle-kit studio",
+		"design:bundle": "node scripts/design-bundle.mjs"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
