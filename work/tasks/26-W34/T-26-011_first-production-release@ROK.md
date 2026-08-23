@@ -5,7 +5,7 @@ status: open
 assignee: [ROK]
 week: 26-W34
 created: 2026-08-23
-blocked-by: [T-26-004, T-26-010]
+blocked-by: [T-26-010]
 source: docs/roadmap.md phase 1 exit criteria
 ---
 
