@@ -424,3 +424,62 @@ multi-tenancy of identity. Against it: hand-rolled auth is where subtle mistakes
 live, so the non-negotiables are token hashing at rest, single use, short
 expiry, rate limiting per email, and constant-time comparison. If passkeys
 arrive later and prove awkward, revisiting this is fair.
+
+---
+
+## ADR-023 — Deploy from the laptop, not from CI
+
+**Status:** superseded by ADR-024
+
+**Context.** The scaffold shipped a GitHub Actions deploy workflow. It needs a
+Cloudflare API token as a repository secret, and without one it failed on every
+push — while CI, which is the useful signal, sat next to it in the same red.
+
+**Decision.** Delete the deploy workflow. Production is published with
+`pnpm run db:migrate:remote` followed by `pnpm run deploy`, from the machine that
+already holds a `wrangler login` session. `ci.yml` stays and runs on every push.
+
+**Consequences.** No Cloudflare credential exists outside the author's machine,
+and there is exactly one red-or-green signal on the repository instead of two.
+What we give up is reproducibility: production is built from whatever the working
+tree contains, and the migration is a separate step someone has to remember.
+That trade is right while there are no users and wrong once there are — revisit
+with a scoped token (`Workers Scripts: Edit`, `D1: Edit`,
+`Account Settings: Read`, one account, never a global key) and production behind
+a GitHub Environment with manual approval. The workflow is in git history rather
+than deleted from the world.
+
+---
+
+## ADR-024 — Deploy through Cloudflare Workers Builds
+
+**Status:** accepted · supersedes ADR-023
+
+**Context.** ADR-023 chose laptop deploys because the alternative on the table
+was a Cloudflare API token living in GitHub secrets. While binding the domain,
+the worker was connected to the repository in the Cloudflare dashboard, which
+turns on **Workers Builds** — Cloudflare clones the repo, runs the build and
+deploys, from inside the account that already owns the worker.
+
+**Decision.** Deploys happen on push to `main`, run by Workers Builds. The
+GitHub Actions workflow stays deleted. `pnpm run deploy` remains available from
+any machine with a `wrangler login` session, as the escape hatch when a deploy
+must not wait for a push.
+
+**Consequences.** No credential exists outside Cloudflare — the objection that
+produced ADR-023 disappears rather than being traded away, and reproducible
+deploys come back with it. Two consequences to keep in view:
+
+- Workers Builds runs a bare `npx wrangler deploy`, so **anything hidden behind
+  `--env` is silently skipped.** `wrangler.jsonc` therefore has exactly one
+  environment, holding production values, and local development overrides them
+  through `.dev.vars`. A second environment must not be reintroduced without
+  changing the deploy command in the dashboard at the same time.
+- **Migrations are not part of the build.** `pnpm run db:migrate:remote` is run
+  by hand before pushing a schema change. Automating it inside the build would
+  mean a failed migration and a deployed worker that expects it, which is the
+  worse of the two failure modes.
+
+GitHub Actions still runs lint, type-check, unit and e2e on every push. Two
+signals, and they answer different questions: GitHub says the code is sound,
+Cloudflare says it is live.

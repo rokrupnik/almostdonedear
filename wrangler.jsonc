@@ -12,21 +12,27 @@
 	"preview_urls": true,
 	"observability": { "enabled": true },
 
-	// Create with: pnpm exec wrangler d1 create almostdonedear --location weur
-	// then paste the id here and into .env (CLOUDFLARE_DATABASE_ID) for drizzle-kit.
+	// One environment on purpose. Cloudflare Workers Builds deploys with a bare
+	// `npx wrangler deploy` (ADR-024), so anything hidden behind `--env` would be
+	// silently skipped. Local development overrides vars through .dev.vars, which
+	// is gitignored — see .dev.vars.example.
+
+	// Created with: wrangler d1 create almostdonedear --location weur
 	// The EU location hint is a deliberate placement decision — see ADR-016.
+	// No "remote": true here on purpose: `wrangler dev` works against a local
+	// D1, so development never writes into the production database.
 	"d1_databases": [
 		{
 			"binding": "DB",
 			"database_name": "almostdonedear",
-			"database_id": "TODO-run-wrangler-d1-create",
+			"database_id": "fc593bd1-ceab-40dd-aefb-ce2b08c4d746",
 			"migrations_dir": "drizzle"
 		}
 	],
 
 	"vars": {
-		"PUBLIC_ORIGIN": "http://localhost:5173"
-	},
+		"PUBLIC_ORIGIN": "https://almostdonedear.app"
+	}
 
 	// Secrets (never in this file — `pnpm exec wrangler secret put <NAME>`):
 	//   RESEND_API_KEY     outbound email, ADR-011
@@ -43,35 +49,4 @@
 	//   "producers": [{ "binding": "NOTIFY", "queue": "almostdonedear-notify" }],
 	//   "consumers": [{ "queue": "almostdonedear-notify", "max_batch_size": 10 }]
 	// },
-
-	"env": {
-		"production": {
-			"name": "almostdonedear",
-			"vars": {
-				"PUBLIC_ORIGIN": "https://almostdonedear.app"
-			},
-			"d1_databases": [
-				{
-					"binding": "DB",
-					"database_name": "almostdonedear",
-					"database_id": "TODO-run-wrangler-d1-create",
-					"migrations_dir": "drizzle"
-				}
-			]
-		},
-		"preview": {
-			"name": "almostdonedear-preview",
-			"vars": {
-				"PUBLIC_ORIGIN": "https://almostdonedear-preview.workers.dev"
-			},
-			"d1_databases": [
-				{
-					"binding": "DB",
-					"database_name": "almostdonedear-preview",
-					"database_id": "TODO-run-wrangler-d1-create",
-					"migrations_dir": "drizzle"
-				}
-			]
-		}
-	}
 }

@@ -1,0 +1,10 @@
+# Copy to .dev.vars — gitignored, read by `wrangler dev` and by the SvelteKit
+# dev server's platform proxy. It overrides wrangler.jsonc `vars` locally, which
+# is why wrangler.jsonc can hold production values and be deployed as-is.
+PUBLIC_ORIGIN="http://localhost:5173"
+
+# Local stand-ins for the worker secrets. Never real production values.
+# RESEND_API_KEY=""
+# VAPID_PUBLIC_KEY=""
+# VAPID_PRIVATE_KEY=""
+# SESSION_SECRET="dev-only-not-a-secret"

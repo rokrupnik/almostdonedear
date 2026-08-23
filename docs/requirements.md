@@ -11,7 +11,7 @@ days (_moba_) and lend each other tools. Two things live in one place because
 they belong together: a work day needs equipment, and equipment is mostly
 borrowed for a work day.
 
-Domains: `almostdonedear.app` (primary), `almostdone.app` (fallback).
+Domain: `almostdonedear.app`, registered on Cloudflare.
 Repository: `git@github.com:rokrupnik/almostdonedear.git`, licensed AGPL-3.0.
 
 **It is a product for multiple groups, not an internal tool** — multi-tenant from

@@ -27,29 +27,39 @@ proposing a change to any of them.
 ```sh
 corepack enable pnpm
 pnpm install
-cp .env.example .env      # fill in once the D1 database exists
-pnpm run gen              # generates worker-configuration.d.ts
+cp .env.example .env           # drizzle-kit credentials, optional
+cp .dev.vars.example .dev.vars # local overrides for the worker's vars
+pnpm run gen                   # generates worker-configuration.d.ts
 pnpm run dev
 ```
 
 `http://localhost:5173` is the app; `http://localhost:5173/dev/ui` is the
 component gallery, which exists in development only.
 
-### Creating the database
+### The database
 
-```sh
-pnpm exec wrangler d1 create almostdonedear --location weur
-```
-
-Paste the returned id into `wrangler.jsonc` (all three environments use their
-own database) and into `.env` as `CLOUDFLARE_DATABASE_ID`, then:
+`almostdonedear` on D1, in WEUR, already created and wired into
+`wrangler.jsonc`. The location hint is deliberate — see ADR-016. Local
+development runs against a local D1, never the remote one.
 
 ```sh
 pnpm run db:generate        # SQL migration from the Drizzle schema
 pnpm run db:migrate:local   # apply to the local D1
+pnpm run db:migrate:remote  # apply to production — before pushing the change
 ```
 
-The `--location weur` hint is deliberate — see ADR-016.
+## Deploying
+
+Pushing to `main` deploys, through Cloudflare Workers Builds (ADR-024). Two
+things follow from that:
+
+- **Migrations are not part of the build.** Run `pnpm run db:migrate:remote`
+  _before_ pushing a schema change.
+- **`wrangler.jsonc` has exactly one environment**, because the build deploys
+  with a bare `wrangler deploy`. Local values live in `.dev.vars`.
+
+`pnpm run deploy` still works from any machine with `wrangler login`, for when a
+deploy must not wait for a push.
 
 ## Scripts
 

@@ -25,8 +25,7 @@ single Worker.
 | Outbound email                              | **Resend** — not Cloudflare (ADR-011)                   |
 
 Plan: **Workers Paid, $5/month**, required for Queues. Domain
-`almostdonedear.app` (primary) and `almostdone.app` (redirect) on Cloudflare
-Registrar.
+`almostdonedear.app` on Cloudflare Registrar.
 
 ## How the rubric resolved
 
@@ -54,13 +53,16 @@ Rules 4, 6 and 7 all point the same way, which is the easy case.
 
 ## Operational shape
 
-- `wrangler.toml` with explicit bindings; two environments, `preview` and
-  `production`.
+- `wrangler.jsonc` with explicit bindings and **one** environment, because
+  Workers Builds deploys without `--env`. Local values come from `.dev.vars`.
 - Secrets via `wrangler secret put` — never in `wrangler.toml`, never in the
   repository. That means the Resend API key, the VAPID private key and the
   session signing secret.
 - Account ID in `.env`, not in committed config.
-- Deploys from GitHub Actions on push: `main` → preview, tag → production.
+- Deploys run in Cloudflare Workers Builds on every push to `main` (ADR-024),
+  with `pnpm run deploy` from a logged-in machine as the escape hatch.
+  `pnpm run db:migrate:remote` is a manual step before pushing a schema change.
+  GitHub Actions runs lint, check and tests; it never deploys.
 - Local development is `wrangler dev` against a local D1; no Docker in this
   project.
 - D1 backups: scheduled export to R2, and the restore path exercised once
