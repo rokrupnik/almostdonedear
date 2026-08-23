@@ -25,6 +25,8 @@
 		<Card><p class="text-sm text-danger">{m.groups_last_admin()}</p></Card>
 	{/if}
 
+	<Button href={`/skupine/${data.group?.id}/akcije`} full>{m.actions_title()}</Button>
+
 	<Card title={m.groups_members()}>
 		{#each data.members as member (member.userId)}
 			<ListRow title={member.displayName} meta={member.userId === data.me ? m.you() : undefined}>
