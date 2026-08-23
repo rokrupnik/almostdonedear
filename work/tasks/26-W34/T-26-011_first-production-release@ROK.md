@@ -14,10 +14,13 @@ Phase 1 is not over when the code works locally. It is over when an invited
 person signs in on `almostdonedear.app`, lands in a group, calls a work day with
 a task list, and someone else answers — on production.
 
-- Apply migrations to the remote D1, then deploy by whichever path T-26-006
-  chose.
-- Issue yourself an instance invite, create the first real group, invite one
-  other human — a person, not a second browser profile.
+- ~~Apply migrations to the remote D1~~ (done, T-26-003) and deploy — which now
+  happens by itself on push, through Workers Builds (ADR-024).
+- ~~Create the first account~~: `rok7rupnik@gmail.com` exists in production.
+  Sign in at https://almostdonedear.app/prijava — the first real email the app
+  sends is that sign-in link, which is also the check T-26-005 is waiting for.
+- Create the first real group, invite one other human — a person, not a second
+  browser profile.
 - Walk the whole path on a phone, on mobile data, outdoors. The gloves are not a
   joke: NFR-3 and NFR-9 are checked here or not at all.
 - Record what broke in a follow-up task rather than fixing it inside this one.

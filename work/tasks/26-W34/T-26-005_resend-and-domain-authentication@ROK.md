@@ -27,10 +27,15 @@ DMARC are launch blockers rather than polish.
 
 ## Done when
 
-- `dig TXT almostdonedear.app` and the DKIM selector both resolve, and Resend
-  shows the domain as verified.
-- A test send from the Resend dashboard to a Gmail address lands in the inbox,
-  and its headers show `spf=pass`, `dkim=pass`, `dmarc=pass`.
-- `pnpm exec wrangler secret list` includes `RESEND_API_KEY`.
+- ✅ DKIM resolves at `resend._domainkey.almostdonedear.app`, SPF at
+  `send.almostdonedear.app` (`v=spf1 include:amazonses.com ~all`, EU region
+  `eu-west-1`), DMARC at `_dmarc` (`v=DMARC1; p=none;`), and Resend reports the
+  domain verified.
+- ✅ `wrangler secret list` shows `RESEND_API_KEY`.
+- ⬜ The remaining check is a real message: sign in at
+  https://almostdonedear.app/prijava and open the headers of the link email.
+  `spf=pass`, `dkim=pass`, `dmarc=pass` — all three, in a Gmail inbox rather than
+  in spam. That email is now the app's own, not a dashboard test send, which is
+  the more honest test anyway.
 
 Blocks T-26-007: the auth flow cannot be tested end to end without this.
