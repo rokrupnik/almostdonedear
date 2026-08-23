@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
+	import { resolve } from '$app/paths';
 	import * as m from '$lib/paraglide/messages';
 	import { Button, Card } from '$lib/ui';
+	import type { PageData } from './$types';
+
+	let { data }: { data: PageData } = $props();
 </script>
 
 <svelte:head>
@@ -16,11 +20,23 @@
 		<p class="text-muted">{m.landing_body()}</p>
 	</div>
 
-	<Card title="Status">
-		<p class="text-sm text-muted">{m.landing_status()}</p>
-	</Card>
+	{#if data.user}
+		<Card title={m.greeting({ name: data.user.displayName })}>
+			<p class="text-sm text-muted">{m.landing_status()}</p>
+			{#snippet footer()}
+				<form method="POST" action="?/odjava">
+					<Button variant="secondary" size="sm" type="submit">{m.sign_out()}</Button>
+				</form>
+			{/snippet}
+		</Card>
+	{:else}
+		<Card title="Status">
+			<p class="text-sm text-muted">{m.landing_status()}</p>
+		</Card>
+		<Button href={resolve('/prijava')} full>{m.auth_title()}</Button>
+	{/if}
 
 	{#if dev}
-		<Button href="/dev/ui" variant="secondary" full>Component gallery</Button>
+		<Button href={resolve('/dev/ui')} variant="ghost" size="sm">Component gallery</Button>
 	{/if}
 </main>

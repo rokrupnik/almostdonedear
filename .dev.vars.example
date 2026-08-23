@@ -3,8 +3,10 @@
 # is why wrangler.jsonc can hold production values and be deployed as-is.
 PUBLIC_ORIGIN="http://localhost:5173"
 
-# Local stand-ins for the worker secrets. Never real production values.
+# Shows the sign-in link on the page instead of only mailing it. Development and
+# end-to-end tests only — in production this must not exist, or anyone who types
+# someone else's address is handed a working sign-in link.
+AUTH_ECHO_LINK="1"
+
+# Without a key, sign-in mail is printed to the terminal instead of sent.
 # RESEND_API_KEY=""
-# VAPID_PUBLIC_KEY=""
-# VAPID_PRIVATE_KEY=""
-# SESSION_SECRET="dev-only-not-a-secret"

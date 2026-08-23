@@ -38,7 +38,8 @@
 	//   RESEND_API_KEY     outbound email, ADR-011
 	//   VAPID_PRIVATE_KEY  Web Push signing
 	//   VAPID_PUBLIC_KEY   Web Push, also exposed to the client
-	//   SESSION_SECRET     session cookie signing
+	// Sessions need no signing secret: the cookie carries an opaque random id
+	// and the session itself lives in D1 (ADR-010).
 
 	// Phase 2 adds the notification machinery (docs/roadmap.md). Both need the
 	// paid plan for Queues, and a wrapper entry that re-exports the adapter's

@@ -56,8 +56,8 @@ Rules 4, 6 and 7 all point the same way, which is the easy case.
 - `wrangler.jsonc` with explicit bindings and **one** environment, because
   Workers Builds deploys without `--env`. Local values come from `.dev.vars`.
 - Secrets via `wrangler secret put` — never in `wrangler.toml`, never in the
-  repository. That means the Resend API key, the VAPID private key and the
-  session signing secret.
+  repository. That means the Resend API key and, later, the VAPID
+  private key.
 - Account ID in `.env`, not in committed config.
 - Deploys run in Cloudflare Workers Builds on every push to `main` (ADR-024),
   with `pnpm run deploy` from a logged-in machine as the escape hatch.

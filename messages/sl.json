@@ -2,5 +2,16 @@
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"landing_tagline": "Moba in orodje na enem mestu.",
 	"landing_body": "Skliči delovno akcijo, napiši, kaj bo treba postoriti, in vedi, kdo prinese kaj.",
-	"landing_status": "V gradnji — faza 1: ogrodje, prijava, skupine, akcije."
+	"landing_status": "V gradnji — faza 1: ogrodje, prijava, skupine, akcije.",
+	"greeting": "Živjo, {name}",
+	"sign_out": "Odjava",
+	"auth_title": "Prijava",
+	"auth_intro": "Vpiši svoj e-naslov in poslali ti bomo povezavo za prijavo. Gesla ni.",
+	"auth_email_label": "E-pošta",
+	"auth_email_invalid": "Vnesi veljaven e-naslov.",
+	"auth_submit": "Pošlji povezavo",
+	"auth_rate_limited": "Preveč poskusov. Počakaj nekaj minut in poskusi znova.",
+	"auth_check_title": "Poglej v nabiralnik",
+	"auth_check_body": "Če ta naslov poznamo, je povezava že na poti. Velja 15 minut in samo enkrat. Če je ni, preveri mapo z vsiljeno pošto.",
+	"auth_link_dead": "Ta povezava ne velja več. Zahtevaj novo."
 }
