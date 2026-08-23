@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
+	import ShareAction from '$lib/components/ShareAction.svelte';
 	import { formatWhen } from '$lib/format';
 	import * as m from '$lib/paraglide/messages';
 	import { Badge, Button, Card, CheckRow, EmptyState, Input, ListRow } from '$lib/ui';
@@ -11,6 +12,9 @@
 
 	const groupId = $derived(page.params.groupId);
 	const isDraft = $derived(data.action.status === 'draft');
+	const shareText = $derived(
+		`${data.action.title} — ${formatWhen(data.action.startsAt, data.action.endsAt)}, ${data.action.locationName}`
+	);
 	const mapUrl = $derived(
 		`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
 			[data.action.locationName, data.action.locationAddress].filter(Boolean).join(', ')
@@ -39,6 +43,55 @@
 			<a href={mapUrl} target="_blank" rel="noreferrer">{m.action_map()}</a>
 		</p>
 	</header>
+
+	{#if data.action.status === 'published'}
+		<Card title={m.rsvp_title()} subtitle={m.rsvp_tally({ ...data.tally })}>
+			<div class="flex gap-2">
+				{#each [['yes', m.rsvp_yes()], ['maybe', m.rsvp_maybe()], ['no', m.rsvp_no()]] as [value, label] (value)}
+					<form method="POST" action="?/respond" use:enhance class="flex-1">
+						<input type="hidden" name="response" {value} />
+						<Button
+							type="submit"
+							full
+							size="sm"
+							variant={data.myResponse === value ? 'primary' : 'secondary'}
+						>
+							{label}
+						</Button>
+					</form>
+				{/each}
+			</div>
+
+			{#if data.answers.length > 0}
+				<ul class="mt-3 flex flex-col gap-1 text-sm">
+					{#each data.answers as answer (answer.userId)}
+						<li class="flex items-center justify-between gap-2">
+							<span>{answer.displayName}</span>
+							<Badge
+								tone={answer.response === 'yes'
+									? 'ok'
+									: answer.response === 'maybe'
+										? 'warn'
+										: 'neutral'}
+							>
+								{answer.response === 'yes'
+									? m.rsvp_yes()
+									: answer.response === 'maybe'
+										? m.rsvp_maybe()
+										: m.rsvp_no()}
+							</Badge>
+						</li>
+					{/each}
+				</ul>
+			{/if}
+
+			{#if data.action.minParticipants}
+				<p class="mt-3 text-sm text-muted">
+					{m.rsvp_minimum({ n: data.action.minParticipants })}
+				</p>
+			{/if}
+		</Card>
+	{/if}
 
 	{#if data.action.description}
 		<Card><p class="whitespace-pre-line">{data.action.description}</p></Card>
@@ -127,6 +180,12 @@
 			</form>
 		{/if}
 	</Card>
+
+	<div class="flex flex-wrap items-center gap-2">
+		{#if data.action.status === 'published'}
+			<ShareAction text={shareText} url={page.url.href} />
+		{/if}
+	</div>
 
 	{#if data.canEdit}
 		<div class="flex flex-wrap items-center gap-2">

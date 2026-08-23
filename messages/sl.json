@@ -91,5 +91,13 @@
 	"action_claim": "Prinesem",
 	"action_unclaim": "Ne morem",
 	"action_publish": "Objavi",
-	"action_duplicate": "Podvoji"
+	"action_duplicate": "Podvoji",
+	"rsvp_title": "Prideš?",
+	"rsvp_yes": "Pridem",
+	"rsvp_maybe": "Mogoče",
+	"rsvp_no": "Ne morem",
+	"rsvp_tally": "{yes} pride · {maybe} mogoče · {no} ne more",
+	"rsvp_minimum": "Akcija potrebuje vsaj {n} ljudi.",
+	"share": "Deli",
+	"share_copied": "Kopirano"
 }
