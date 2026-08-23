@@ -9,6 +9,7 @@
  *  - short expiry, and requests are rate limited per address and per IP
  *  - session ids come from getRandomValues and carry no timestamp
  */
+import { redirect } from '@sveltejs/kit';
 import { and, count, eq, gte, isNull } from 'drizzle-orm';
 import type { Db } from './db';
 import { loginToken, session, user, type User } from './db/schema';
@@ -165,4 +166,27 @@ export async function validateSession(db: Db, id: string): Promise<User | null> 
 /** Revocation has to be read-after-write, which is why sessions live in D1. */
 export async function destroySession(db: Db, id: string): Promise<void> {
 	await db.delete(session).where(eq(session.id, id));
+}
+
+/** Every signed-in route starts with this line, so none of them forget. */
+export function requireUser(locals: App.Locals): User {
+	if (!locals.user) redirect(303, '/prijava');
+	return locals.user;
+}
+
+/** Opens a session for a user the caller has already established the right to. */
+export async function openSession(
+	db: Db,
+	userId: string,
+	userAgent?: string | null
+): Promise<string> {
+	const id = sessionId();
+	await db.insert(session).values({
+		id,
+		userId,
+		expiresAt: new Date(Date.now() + SESSION_TTL_MS),
+		lastUsedAt: new Date(),
+		userAgent: userAgent?.slice(0, 255) ?? null
+	});
+	return id;
 }

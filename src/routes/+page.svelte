@@ -24,9 +24,12 @@
 		<Card title={m.greeting({ name: data.user.displayName })}>
 			<p class="text-sm text-muted">{m.landing_status()}</p>
 			{#snippet footer()}
-				<form method="POST" action="?/odjava">
-					<Button variant="secondary" size="sm" type="submit">{m.sign_out()}</Button>
-				</form>
+				<div class="flex items-center justify-between gap-2">
+					<Button href={resolve('/skupine')} size="sm">{m.groups_title()}</Button>
+					<form method="POST" action="?/odjava">
+						<Button variant="ghost" size="sm" type="submit">{m.sign_out()}</Button>
+					</form>
+				</div>
 			{/snippet}
 		</Card>
 	{:else}

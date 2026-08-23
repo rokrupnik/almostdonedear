@@ -5,7 +5,6 @@ status: open
 assignee: [ROK]
 week: 26-W34
 created: 2026-08-23
-blocked-by: [T-26-008]
 source: docs/roadmap.md phase 1.5, FR-10 to FR-14, FR-19
 ---
 

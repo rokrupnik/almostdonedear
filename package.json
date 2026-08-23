@@ -30,7 +30,8 @@
 		"db:push": "drizzle-kit push",
 		"db:studio": "drizzle-kit studio",
 		"design:bundle": "node scripts/design-bundle.mjs",
-		"user:create": "node scripts/user-create.mjs"
+		"user:create": "node scripts/user-create.mjs",
+		"invite:instance": "node scripts/invite-instance.mjs"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
