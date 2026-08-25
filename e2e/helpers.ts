@@ -22,6 +22,12 @@ export async function signIn(page: Page, email: string): Promise<void> {
 	await expect(link).toBeVisible();
 	const href = new URL((await link.getAttribute('href')) ?? '');
 	await page.goto(href.pathname + href.search);
+	// the link only offers the sign-in; the POST behind this button consumes it
+	await page.getByRole('button', { name: 'Prijavi se' }).click();
+
+	// and the redirect it triggers is client-side, so a goto() issued before it
+	// lands is simply overwritten — wait for the signed-in landing page instead
+	await expect(page.getByRole('link', { name: 'Skupine' })).toBeVisible();
 }
 
 export function pathOf(absoluteUrl: string): string {

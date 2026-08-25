@@ -99,5 +99,8 @@
 	"rsvp_tally": "{yes} pride · {maybe} mogoče · {no} ne more",
 	"rsvp_minimum": "Akcija potrebuje vsaj {n} ljudi.",
 	"share": "Deli",
-	"share_copied": "Kopirano"
+	"share_copied": "Kopirano",
+	"auth_confirm_title": "Še korak",
+	"auth_confirm_body": "Klikni spodaj in prijavljen si. Ta dodatni klik je tu zato, ker poštni filtri in predogledi povezav sami odprejo vsako povezavo v sporočilu — brez njega bi ti prijavo lahko »porabil« nekdo drug, preden bi jo sploh videl.",
+	"auth_confirm_button": "Prijavi se"
 }

@@ -32,13 +32,16 @@ test('a mailed link signs you in, once', async ({ page }) => {
 	const link = await requestLink(page);
 
 	await page.goto(link);
+	await page.getByRole('button', { name: 'Prijavi se' }).click();
 	await expect(page.getByText('Živjo, E2E Tester')).toBeVisible();
 
 	// same link again: the session is gone and the link is spent
 	await page.getByRole('button', { name: 'Odjava' }).click();
 	await expect(page.getByRole('link', { name: 'Prijava' })).toBeVisible();
 
+	// opening it a second time still offers the button; pressing it is refused
 	await page.goto(link);
+	await page.getByRole('button', { name: 'Prijavi se' }).click();
 	await expect(page.getByText(/Ta povezava ne velja več/)).toBeVisible();
 });
 
@@ -51,5 +54,18 @@ test('an unknown address reveals nothing', async ({ page }) => {
 
 test('a forged token is refused', async ({ page }) => {
 	await page.goto('/prijava/potrdi?t=' + 'f'.repeat(64));
+	await page.getByRole('button', { name: 'Prijavi se' }).click();
 	await expect(page.getByText(/Ta povezava ne velja več/)).toBeVisible();
+});
+
+test('merely opening the link does not spend it', async ({ page, context }) => {
+	const link = await requestLink(page);
+
+	// what a mail scanner or a link preview does: fetch it, without a person
+	const response = await context.request.get(link);
+	expect(response.status()).toBe(200);
+
+	await page.goto(link);
+	await page.getByRole('button', { name: 'Prijavi se' }).click();
+	await expect(page.getByText('Živjo, E2E Tester')).toBeVisible();
 });
