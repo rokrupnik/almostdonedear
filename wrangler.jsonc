@@ -31,7 +31,10 @@
 	],
 
 	"vars": {
-		"PUBLIC_ORIGIN": "https://almostdonedear.app"
+		"PUBLIC_ORIGIN": "https://almostdonedear.app",
+		// Set once Cloudflare Email Routing forwards this address; empty means the
+		// header is omitted rather than pointing at a mailbox that bounces.
+		"REPLY_TO": ""
 	}
 
 	// Secrets (never in this file — `pnpm exec wrangler secret put <NAME>`):

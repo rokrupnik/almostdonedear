@@ -19,7 +19,11 @@ export interface Mailer {
 const FROM = 'AlmostDone, Dear <pozdrav@almostdonedear.app>';
 
 class ResendMailer implements Mailer {
-	constructor(private readonly apiKey: string) {}
+	constructor(
+		private readonly apiKey: string,
+		/** A domain that can receive mail scores better, and replies stop vanishing. */
+		private readonly replyTo?: string
+	) {}
 
 	async send(mail: Mail): Promise<void> {
 		const response = await fetch('https://api.resend.com/emails', {
@@ -33,7 +37,8 @@ class ResendMailer implements Mailer {
 				to: [mail.to],
 				subject: mail.subject,
 				text: mail.text,
-				html: mail.html
+				html: mail.html,
+				...(this.replyTo ? { reply_to: this.replyTo } : {})
 			})
 		});
 
@@ -53,26 +58,42 @@ class ConsoleMailer implements Mailer {
 
 export function mailer(env: Env | undefined): Mailer {
 	const key = env?.RESEND_API_KEY;
-	return key ? new ResendMailer(key) : new ConsoleMailer();
+	const replyTo = (env as unknown as Record<string, string | undefined> | undefined)?.REPLY_TO;
+	return key ? new ResendMailer(key, replyTo || undefined) : new ConsoleMailer();
 }
 
+/**
+ * Two lines and a link is the shape of a phishing message, which is part of why
+ * the first one landed in spam even with DKIM, SPF and DMARC all passing. It
+ * says who we are, why this arrived, and shows the address it leads to.
+ */
 export function signInMail(link: string): Omit<Mail, 'to'> {
 	return {
-		subject: 'Prijava v AlmostDone, Dear',
+		subject: 'Tvoja prijavna povezava za AlmostDone, Dear',
 		text: [
 			'Živjo!',
 			'',
-			'Za prijavo odpri to povezavo:',
+			'Nekdo — najbrž ti — je na almostdonedear.app zahteval prijavo s tem',
+			'naslovom. AlmostDone, Dear je aplikacija za dogovarjanje o mobah in',
+			'izposojo orodja med prijatelji. Gesel nima; prijaviš se s to povezavo:',
+			'',
 			link,
 			'',
 			'Povezava velja 15 minut in samo enkrat.',
-			'Če prijave nisi zahteval, to sporočilo mirno izbriši.'
+			'',
+			'Če prijave nisi zahteval, ni treba storiti ničesar — brez klika se ne',
+			'zgodi nič in sporočilo lahko izbrišeš.'
 		].join('\n'),
 		html: [
 			'<p>Živjo!</p>',
+			'<p>Nekdo — najbrž ti — je na <strong>almostdonedear.app</strong> zahteval ',
+			'prijavo s tem naslovom. AlmostDone, Dear je aplikacija za dogovarjanje o ',
+			'mobah in izposojo orodja med prijatelji. Gesel nima.</p>',
 			`<p><a href="${link}">Prijavi se</a></p>`,
-			'<p>Povezava velja 15 minut in samo enkrat.<br>',
-			'Če prijave nisi zahteval, to sporočilo mirno izbriši.</p>'
+			`<p style="font-size:13px;color:#57534e">Če povezava ne deluje, prilepi v brskalnik:<br>${link}</p>`,
+			'<p>Povezava velja 15 minut in samo enkrat.</p>',
+			'<p style="font-size:13px;color:#57534e">Če prijave nisi zahteval, ni treba ',
+			'storiti ničesar — brez klika se ne zgodi nič.</p>'
 		].join('')
 	};
 }
