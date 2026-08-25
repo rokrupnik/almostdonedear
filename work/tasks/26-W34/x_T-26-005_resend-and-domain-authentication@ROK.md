@@ -1,10 +1,11 @@
 ---
 task: T-26-005
 title: Resend account and domain authentication
-status: open
+status: done
 assignee: [ROK]
 week: 26-W34
 created: 2026-08-23
+completed: 2026-08-25
 source: ADR-011, ADR-010
 ---
 
