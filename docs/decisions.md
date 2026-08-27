@@ -483,3 +483,41 @@ deploys come back with it. Two consequences to keep in view:
 GitHub Actions still runs lint, type-check, unit and e2e on every push. Two
 signals, and they answer different questions: GitHub says the code is sound,
 Cloudflare says it is live.
+
+---
+
+## ADR-025 — No friend graph: groups stay the audience, tools cross them
+
+**Status:** proposed
+
+**Context.** With phase 1 running, the question came up of replacing groups with
+a LinkedIn/Facebook-style graph of connections. Two real problems motivated it:
+a tool has to be entered once per group, and an action cannot invite people from
+two circles.
+
+**Decision.** Keep groups as the audience for actions, and address both problems
+without a friend graph:
+
+- an action may invite **several groups** (`action_audience`), and
+- tool visibility gains a **derived** scope: everyone you share an active group
+  with, resolved in `scope.ts` like every other scope.
+
+**Consequences.** The property being protected is the shared denominator: "2
+pride" means two out of a known eight, and everyone sees the same list. That
+shared list is what produces the social pressure a work day runs on, and a
+per-person graph dissolves it — each viewer would see a different slice, and
+"how many of us will there be" would stop having one answer. Groups also keep an
+admin who can fix or cancel an action whose caller has gone quiet, and they keep
+disclosure explicit: inviting two groups says out loud that the two groups will
+see each other.
+
+Deriving connections from shared membership avoids requests, accepting,
+declining and unfriending — machinery Facebook needs because its users do not
+already know each other. The cost is that a connection cannot exist without a
+shared group; in this product that appears to be no cost at all.
+
+Both parts wait until phase 3 has shipped and there is evidence — how much
+equipment was entered twice, how many actions were called in the wrong group —
+rather than being built on the strength of the argument alone. Written up in
+`work/ideas/multi-group-actions.md` and
+`work/ideas/tool-visibility-across-my-groups.md`.

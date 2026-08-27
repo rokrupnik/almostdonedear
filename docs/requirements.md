@@ -215,16 +215,19 @@ Each of these was considered and rejected for a stated reason, recorded in
 
 ## 6. Backlog (post-MVP, ordered by expected value)
 
-1. **Tool requests across the network** — "looking for a chainsaw on Saturday"
+1. **One action, several groups invited**, and **tools visible to everyone you
+   share a group with** — the two changes that answer "why not a friend graph"
+   (ADR-025) without becoming one.
+2. **Tool requests across the network** — "looking for a chainsaw on Saturday"
    fans out to friends-of-friends; only whoever answers is revealed. Preferred
    over an open cross-group catalogue because consent is built in.
-2. **Gamification** — a light, general "man points" scheme derived from existing
+3. **Gamification** — a light, general "man points" scheme derived from existing
    attendance data. No migration needed if attendance is recorded from day one.
-3. Photos on actions and tool damage reports (needs R2 and a consent decision).
-4. Passkeys alongside magic links.
-5. English UI.
-6. Recurring actions, if duplication proves insufficient in practice.
-7. Cross-group tool catalogue, if and only if the network grows dense.
+4. Photos on actions and tool damage reports (needs R2 and a consent decision).
+5. Passkeys alongside magic links.
+6. English UI.
+7. Recurring actions, if duplication proves insufficient in practice.
+8. Cross-group tool catalogue, if and only if the network grows dense.
 
 ## 7. Definition of done for the MVP
 

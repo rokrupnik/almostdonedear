@@ -20,3 +20,14 @@ private.
 The model is already prepared for either: `tool.visibility` ships with
 `private | group | network`, and `network` resolves to nothing inside one
 function in `src/lib/server/scope.ts`.
+
+## Where this sits now
+
+ADR-025 takes the one-hop step first: tools visible to everyone you share a
+group with (`work/ideas/tool-visibility-across-my-groups.md`). That covers the
+"entered twice" problem and needs no consent machinery, because everyone who can
+see the tool already shares a group with its owner.
+
+This file stays the two-hop idea, and the consent problem described above is
+exactly what one hop does not have. If one hop turns out to be enough, this is
+the right thing to never build.
